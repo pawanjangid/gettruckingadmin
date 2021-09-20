@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -28,13 +12,13 @@ const MapWrapper = () => {
   React.useEffect(() => {
     let google = window.google;
     let map = mapRef.current;
-    let lat = "40.748817";
-    let lng = "-73.985428";
+    let lat = "26.8808362";
+    let lng = "75.539315";
     const myLatlng = new google.maps.LatLng(lat, lng);
     const mapOptions = {
       zoom: 12,
       center: myLatlng,
-      scrollwheel: false,
+      scrollwheel: true,
       zoomControl: true,
       styles: [
         {
@@ -86,12 +70,12 @@ const MapWrapper = () => {
       position: myLatlng,
       map: map,
       animation: google.maps.Animation.DROP,
-      title: "Light Bootstrap Dashboard PRO React!",
+      title: "Hello get Trucking Admin Your are Here",
     });
 
     const contentString =
-      '<div class="info-window-content"><h2>Light Bootstrap Dashboard PRO React</h2>' +
-      "<p>A premium Admin for React-Bootstrap, Bootstrap, React, and React Hooks.</p></div>";
+      '<div class="info-window-content"><h2>Admin Is Here</h2>' +
+      "<p>hello this admin is developed by King</p></div>";
 
     const infowindow = new google.maps.InfoWindow({
       content: contentString,

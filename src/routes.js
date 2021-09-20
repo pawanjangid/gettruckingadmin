@@ -15,6 +15,7 @@ import WalletBalance from "views/examples/WalletBalance";
 import Documents from "views/examples/Documents";
 import ManageFare from "views/examples/ManageFare";
 import Country from "views/examples/Country";
+import Trips from "views/examples/Trips";
 
 var routes = [
   {
@@ -170,10 +171,10 @@ var routes = [
     visibility : true
   },
   {
-    path: "#!",
+    path: "/trips",
     name: "Manage Trips",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Trips,
     layout: "/admin",
     visibility : true
   },
@@ -210,10 +211,10 @@ var routes = [
     visibility : true
   },
   {
-    path: "/tables",
+    path: "/maps",
     name: "Manage Map",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Maps,
     layout: "/admin",
     visibility : true
   },
