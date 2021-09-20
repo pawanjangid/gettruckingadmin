@@ -1,7 +1,6 @@
 import React,{ useState,useEffect} from "react";
 import axios from "axios";
 import {
-  Media,
   Card,
   CardHeader,
   CardFooter,
@@ -127,7 +126,7 @@ const handleDelete = () => {
                   <Col><h3>Coupon Manager</h3></Col>
                   <Col><Button color="primary" onClick={toggle} >Add Coupon</Button></Col>
                 </Row>
-                
+                {message}
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">

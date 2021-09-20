@@ -73,7 +73,7 @@ const handleFileChange = (e) => {
           file: file,
         };
         allFiles.push(fileInfo);
-        if(allFiles.length == files.length){
+        if(allFiles.length === files.length){
             console.log(allFiles)
           setImage(allFiles[0].base64)
         }
@@ -213,7 +213,7 @@ const handleDelete = () => {
                   <Col><h3>Vehicle Type Detail</h3></Col>
                   <Col><Button color="primary" onClick={toggle} >Add Vehicle Type</Button></Col>
                 </Row>
-                
+                {message}
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">

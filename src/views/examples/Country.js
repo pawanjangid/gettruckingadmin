@@ -1,7 +1,6 @@
 import React,{ useState,useEffect} from "react";
 import axios from "axios";
 import {
-  Media,
   Card,
   CardHeader,
   CardFooter,
@@ -19,7 +18,6 @@ import Header from "components/Headers/Header.js";
 
 const Country = (props) => {
 const [vehicle,setVehicle] = useState([]);
-const [message,setMessage] = useState();
 
 
   useEffect(() => {
