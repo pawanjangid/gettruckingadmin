@@ -4,7 +4,6 @@ import Maps from "views/examples/Maps.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
-import Icons from "views/examples/Icons.js";
 import Riders from "views/examples/Riders";
 import Drivers from "views/examples/Drivers";
 import ManageDocuments from "views/examples/ManageDocuments";
@@ -16,6 +15,10 @@ import Documents from "views/examples/Documents";
 import ManageFare from "views/examples/ManageFare";
 import Country from "views/examples/Country";
 import Trips from "views/examples/Trips";
+import Admins from "views/examples/Admins";
+import Payout from "views/examples/Payout";
+import Comming from "views/examples/Comming";
+
 
 var routes = [
   {
@@ -27,18 +30,10 @@ var routes = [
     visibility : true
   },
   {
-    path: "/icons",
+    path: "/admins",
     name: "Manage admin",
     icon: "ni ni-planet text-blue",
-    component: Icons,
-    layout: "/admin",
-    visibility : true
-  },
-  {
-    path: "/maps",
-    name: "Manage Company",
-    icon: "ni ni-pin-3 text-orange",
-    component: Maps,
+    component: Admins,
     layout: "/admin",
     visibility : true
   },
@@ -82,38 +77,7 @@ var routes = [
     layout: "/admin",
     visibility : false
   },
-  {
-    path: "#!",
-    name: "Manage Email",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin",
-    visibility : true
-  },
-  {
-    path: "#!",
-    name: "Manage Manual Booking",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin",
-    visibility : true
-  },
-  {
-    path: "#!",
-    name: "Vehicle Make",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin",
-    visibility : true
-  },
-  {
-    path: "#!",
-    name: "Vehicle Modal",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin",
-    visibility : true
-  },
+
   {
     path: "/VehicleType",
     name: "Manage Vehicle Type",
@@ -139,26 +103,26 @@ var routes = [
     visibility : true
   },
   {
-    path: "#!",
+    path: "/additional",
     name: "Aditional Reason",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Comming,
     layout: "/admin",
     visibility : true
   },
   {
-    path: "#!",
+    path: "/reasons",
     name: "Manage Cancel Reason",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Comming,
     layout: "/admin",
     visibility : true
   },
   {
-    path: "#!",
+    path: "/Locations",
     name: "Manage Location",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Comming,
     layout: "/admin",
     visibility : true
   },
@@ -179,18 +143,18 @@ var routes = [
     visibility : true
   },
   {
-    path: "#!",
+    path: "/Payouts",
     name: "Manage Payouts",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Payout,
     layout: "/admin",
     visibility : true
   },
   {
-    path: "#!",
+    path: "/statement",
     name: "Manage Statement",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Comming,
     layout: "/admin",
     visibility : true
   },
@@ -199,14 +163,6 @@ var routes = [
     name: "Manage Discount & Promo",
     icon: "ni ni-bullet-list-67 text-red",
     component: DiscountAndCoupon,
-    layout: "/admin",
-    visibility : true
-  },
-  {
-    path: "/tables",
-    name: "Manage Referrals",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
     layout: "/admin",
     visibility : true
   },
@@ -227,26 +183,18 @@ var routes = [
     visibility : true
   },
   {
-    path: "/tables",
+    path: "/currency",
     name: "Manage Currency",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Comming,
     layout: "/admin",
     visibility : true
   },
   {
-    path: "/tables",
+    path: "/Help",
     name: "Manage Help & Support",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin",
-    visibility : true
-  },
-  {
-    path: "/tables",
-    name: "Manage Static Page",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Comming,
     layout: "/admin",
     visibility : true
   },

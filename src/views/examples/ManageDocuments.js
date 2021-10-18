@@ -62,7 +62,7 @@ const [users,setUsers] = useState([]);
                     <th scope="row">
                     
                           <span className="mb-0 text-sm">
-                            {user.firstName + ' ' + user.lastName} 
+                            {user.fullName} 
                           </span>
                     </th>
                     <td>{user.email} </td>

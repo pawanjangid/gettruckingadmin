@@ -56,7 +56,7 @@ const AdminNavbar = (props) => {
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      Admin
                     </span>
                   </Media>
                 </Media>
@@ -77,9 +77,9 @@ const AdminNavbar = (props) => {
                   <i className="ni ni-calendar-grid-58" />
                   <span>Activity</span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+                <DropdownItem to="/admin/chat" tag={Link}>
                   <i className="ni ni-support-16" />
-                  <span>Support</span>
+                  <span>Chat</span>
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>

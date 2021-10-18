@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 
 // reactstrap components
 import {
@@ -15,8 +15,26 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-
+import axios from "axios"
 const Documents = () => {
+
+  const [users,setUsers] = useState([])
+  useEffect(() => {
+    axios.get("https://gettruckingbackend.herokuapp.com/admin/admin")
+    .then((response)=>{
+      if(response.status===200){
+        setUsers(response.data.data);
+      }else{
+        console.log(response.data.message);
+      }
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  },[]);
+
+
+  
   return (
     <>
       <UserHeader />

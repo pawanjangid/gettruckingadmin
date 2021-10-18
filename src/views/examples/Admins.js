@@ -14,16 +14,16 @@ import {
   PaginationLink,
   Table,
   Container,
-  Row
+  Row,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 
-const Drivers = (props) => {
+const Riders = () => {
 const [users,setUsers] = useState([]);
 
   useEffect(() => {
-    axios.get("https://gettruckingbackend.herokuapp.com/admin/drivers")
+    axios.get("https://gettruckingbackend.herokuapp.com/admin/admin")
     .then((response)=>{
       if(response.status===200){
         setUsers(response.data.data);
@@ -37,9 +37,7 @@ const [users,setUsers] = useState([]);
   },[]);
 
 
-useEffect(()=>{
-  console.log(props.match.params)
-})
+
 
   return (
     <>
@@ -59,7 +57,7 @@ useEffect(()=>{
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">role</th>
                     <th scope="col">Created At</th>
                     <th scope="col" />
                   </tr>
@@ -70,16 +68,13 @@ useEffect(()=>{
                     <th scope="row">
                     
                           <span className="mb-0 text-sm">
-                            {user.fullName} 
+                            {user.name} 
                           </span>
                     </th>
                     <td>{user.email} </td>
                     <td>{user.phone} </td>
                     <td>
-                      <Badge color="" className="badge-dot mr-4">
-                        <i className="bg-warning" />
-                        Active
-                      </Badge>
+                      {user.role}
                     </td>
                     <td>
                       {(new Date(user.createdAt * 1000)).toGMTString()}  
@@ -99,8 +94,7 @@ useEffect(()=>{
                         </DropdownToggle>
                         <DropdownMenu className="dropdown-menu-arrow" right>
                           <DropdownItem
-                            href={"/Profile/"+user.user_id}
-                            onClick={(e) => e.preventDefault()}
+                            href={"./Profile/"+user.user_id}
                           >
                             Profile
                           </DropdownItem>
@@ -192,4 +186,4 @@ useEffect(()=>{
   );
 };
 
-export default Drivers;
+export default Riders;
