@@ -20,6 +20,8 @@ import Header from "components/Headers/Header.js";
 
 const Trips = (props) => {
 const [orders,setOrders] = useState([]);
+const [start,setStart] = useState(0);
+const [end,setEnd] = useState(10);
 
   useEffect(() => {
     axios.get("https://gettruckingbackend.herokuapp.com/admin/orders")
@@ -65,7 +67,7 @@ const [orders,setOrders] = useState([]);
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((order)=>
+                  {orders.slice(start,end).map((order)=>
                       <tr>
                     
                     <td>{JSON.parse(order.locations)[0].formatted_address} </td>
@@ -81,7 +83,7 @@ const [orders,setOrders] = useState([]);
                     <td>{order.driver_id ? "Assigned" : "Waiting"} </td>
                     <td>s${order.amount} </td>
                     <td>
-                      {(new Date(order.createdAt * 1000)).toGMTString()}  
+                      {(new Date(order.time * 1000)).toGMTString()}  
                     </td>
                     
                     <td className="text-right">
@@ -98,26 +100,20 @@ const [orders,setOrders] = useState([]);
                         </DropdownToggle>
                         <DropdownMenu className="dropdown-menu-arrow" right>
                           <DropdownItem
-                            href={"/Profile/"+order.user_id}
+                            href="#!"
                             onClick={(e) => e.preventDefault()}
                           >
-                            Profile
+                            Detail
                           </DropdownItem>
                           <DropdownItem
-                            href="#pablo"
+                            href="#!"
                             onClick={(e) => e.preventDefault()}
                           >
-                            Ride Detail
+                            Assign Ride to Driver
                           </DropdownItem>
+                         
                           <DropdownItem
-                            href="#pablo"
-                            style={{backgroundColor:"#ffe8e0"}}
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            Restrict
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
+                            href="#!"
                             style={{backgroundColor:"#ff6363"}}
                             onClick={(e) => e.preventDefault()}
                           >
@@ -133,48 +129,44 @@ const [orders,setOrders] = useState([]);
               </Table>
               <CardFooter className="py-4">
                 <nav aria-label="...">
-                  <Pagination
+                <Pagination
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
                     <PaginationItem className="disabled">
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(0);setEnd(10);}}
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem className="active">
+                    <PaginationItem className={`${(start===0 )&&(end===10)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                      onClick={(e) => {setStart(0);setEnd(10);}}
                       >
                         1
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===10 )&&(end===20)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(10);setEnd(20);}}
                       >
-                        2 <span className="sr-only">(current)</span>
+                        2 
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===20 )&&(end===30)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(20);setEnd(30);}}
                       >
                         3
                       </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+
+                        onClick={(e) => {setStart(start+10);setEnd(end+10);}}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>

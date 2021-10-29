@@ -16,11 +16,13 @@ import {
   Container,
   Row,
 } from "reactstrap";
-// core components
+
 import Header from "components/Headers/Header.js";
 
 const Riders = () => {
 const [users,setUsers] = useState([]);
+const [start,setStart] = useState(0);
+const [end,setEnd] = useState(10);
 
   useEffect(() => {
     axios.get("https://gettruckingbackend.herokuapp.com/admin/users")
@@ -37,6 +39,7 @@ const [users,setUsers] = useState([]);
   },[]);
 
 
+  
 
 
   return (
@@ -63,7 +66,7 @@ const [users,setUsers] = useState([]);
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user)=>
+                  {users.slice(start,end).map((user)=>
                       <tr>
                     <th scope="row">
                     
@@ -97,30 +100,24 @@ const [users,setUsers] = useState([]);
                         </DropdownToggle>
                         <DropdownMenu className="dropdown-menu-arrow" right>
                           <DropdownItem
-                            href={"./Profile/"+user.user_id}
+                            href={"./ProfileUser/"+user.user_id}
                           >
                             Profile
                           </DropdownItem>
-                          <DropdownItem
+                          {/* <DropdownItem
                             href="#pablo"
                             onClick={(e) => e.preventDefault()}
                           >
                             Ride Detail
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            style={{backgroundColor:"#ffe8e0"}}
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            Restrict
-                          </DropdownItem>
-                          <DropdownItem
+                          </DropdownItem> */}
+                          
+                          {/* <DropdownItem
                             href="#pablo"
                             style={{backgroundColor:"#ff6363"}}
                             onClick={(e) => e.preventDefault()}
                           >
                             Remove
-                          </DropdownItem>
+                          </DropdownItem> */}
                         </DropdownMenu>
                       </UncontrolledDropdown>
                     </td>
@@ -137,42 +134,38 @@ const [users,setUsers] = useState([]);
                   >
                     <PaginationItem className="disabled">
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(0);setEnd(10);}}
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem className="active">
+                    <PaginationItem className={`${(start===0 )&&(end===10)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                      onClick={(e) => {setStart(0);setEnd(10);}}
                       >
                         1
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===10 )&&(end===20)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(10);setEnd(20);}}
                       >
-                        2 <span className="sr-only">(current)</span>
+                        2 
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===20 )&&(end===30)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(20);setEnd(30);}}
                       >
                         3
                       </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+
+                        onClick={(e) => {setStart(start+10);setEnd(end+10);}}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>

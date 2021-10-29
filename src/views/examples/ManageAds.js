@@ -32,7 +32,8 @@ const [banner,setBanner] = useState([]);
 const [image,setImage] = useState();
 const [count,setCount] = useState(0);
 const [message,setMessage] = useState();
-
+const [start,setStart] = useState(0);
+const [end,setEnd] = useState(10);
 
   useEffect(() => {
     axios.get("https://gettruckingbackend.herokuapp.com/admin/banner")
@@ -86,7 +87,7 @@ const submitHandler = () => {
       if(response.status===200){
           console.log(response)
         setCount(count+1);
-        setMessage('Vehicle added successfully');
+        setMessage('Banner added successfully');
       }else{
         setMessage(response.data.message);
       }
@@ -96,8 +97,29 @@ const submitHandler = () => {
     })
 }
 
-const handleDelete = () => {
-  console.log("Deleted");
+
+
+const handleDelete = (banner_id) => {
+
+  const data = {
+    banner_id:banner_id
+  }
+  console.log(data)
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/deleteBanner",data)
+  .then((response)=>{
+    if(response.status===200){
+      setMessage('Banner Removed successfully');
+        console.log(response)
+      setCount(count+1);
+    }else{
+      console.log(response.data.message);
+    }
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+
+
 }
 
   const [modal, setModal] = useState(false);
@@ -162,7 +184,7 @@ const handleDelete = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {banner.map((bnr)=>
+                  {banner.slice(start,end).map((bnr)=>
                     <tr>
                     <th>
                       <Media className="align-items-center">
@@ -182,7 +204,7 @@ const handleDelete = () => {
                     
                    
                     <td>
-                    <Button className='btn btn-danger' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(bnr.vehicle_id) } } >Remove</Button>
+                    <Button className='btn btn-danger' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(bnr.banner_id) } } >Remove</Button>
                     </td>
                     
                     
@@ -193,48 +215,44 @@ const handleDelete = () => {
               </Table>
               <CardFooter className="py-4">
                 <nav aria-label="...">
-                  <Pagination
+                <Pagination
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
                     <PaginationItem className="disabled">
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(0);setEnd(10);}}
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem className="active">
+                    <PaginationItem className={`${(start===0 )&&(end===10)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                      onClick={(e) => {setStart(0);setEnd(10);}}
                       >
                         1
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===10 )&&(end===20)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(10);setEnd(20);}}
                       >
-                        2 <span className="sr-only">(current)</span>
+                        2 
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===20 )&&(end===30)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(20);setEnd(30);}}
                       >
                         3
                       </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+
+                        onClick={(e) => {setStart(start+10);setEnd(end+10);}}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>

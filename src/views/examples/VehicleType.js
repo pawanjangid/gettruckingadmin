@@ -23,6 +23,7 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
+  Label
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -106,11 +107,68 @@ const submitHandler = () => {
     })
 }
 
-const handleDelete = () => {
-  console.log("Deleted");
+
+const handleDelete = (vehicle_id) => {
+  const data = {
+    vehicle_id: vehicle_id,
+  }
+
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/removeVehicle",data)
+  .then((response)=>{
+    if(response.status===200){
+        console.log(response)
+      setCount(count+1);
+      setMessage('Vehicle Removed successfully');
+    }else{
+      setMessage(response.data.message);
+    }
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
 }
 
+
+const [vehicleId,setVehicleId] = useState();
+const [editModal,setEditModal] = useState(false);
+function editData(item){
+  console.log(item);
+  setBaseprice(item.baseprice);
+  setParKmCost(item.parKmcost);
+  setVehicleId(item.vehicle_id);
+  Edittoggle();
+}
+
+
+
+const submitEditHandler = () => {
+  const data = {
+    baseprice:baseprice,
+    parKmcost:parKmcost,
+    vehicle_id:vehicleId,
+  }
+  console.log(data)
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/editFare",data)
+  .then((response)=>{
+    if(response.status===200){
+        console.log(response)
+      setCount(count+1);
+      setMessage('Fare Updated updated successfully');
+    }else{
+      setMessage(response.data.message);
+    }
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+}
+
+const Edittoggle = () => setEditModal(!editModal);
+
+
   const [modal, setModal] = useState(false);
+  const [start,setStart] = useState(0);
+  const [end,setEnd] = useState(10);
 
   const toggle = () => setModal(!modal);
 
@@ -200,6 +258,51 @@ const handleDelete = () => {
             <Button color="secondary" onClick={toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
+        <Modal isOpen={editModal} toggle={Edittoggle} className="">
+          <ModalHeader toggle={Edittoggle}>Edit Fare</ModalHeader>
+          <ModalBody>
+            
+          <Form role="form">
+             
+              <FormGroup>
+                  <Label for="basePrice">
+                    Base Price
+                  </Label>
+                <InputGroup className="input-group-alternative">
+                
+                  <Input
+                    placeholder="Base Price"
+                    id="basePrice"
+                    type="text"
+                    value={baseprice}
+                    onChange={(e)=>{setBaseprice(e.target.value)}}
+                  />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                  <Label for="parKmcost">
+                    Par Km Cost
+                  </Label>
+                <InputGroup className="input-group-alternative">
+                  <Input
+                    placeholder="Par Km Cost"
+                    id="parKmcost"
+                    type="text"
+                    value={parKmcost}
+                    onChange={(e)=>{setParKmCost(e.target.value)}}
+                  />
+                </InputGroup>
+              </FormGroup>
+            </Form>
+          
+          
+          
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={()=>{submitEditHandler();Edittoggle()}}>Submit</Button>{' '}
+            <Button color="secondary" onClick={Edittoggle}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
       
 
 
@@ -228,7 +331,7 @@ const handleDelete = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {vehicle.map((vhl)=>
+                  {vehicle.slice(start,end).map((vhl)=>
                     <tr>
                     <th>
                       <Media className="align-items-center">
@@ -258,6 +361,8 @@ const handleDelete = () => {
                     <td>{vhl.baseprice} </td>
                     <td>{vhl.parKmcost}</td>
                     <td>
+                    <Button className='btn btn-warning' onClick={() => { editData(vhl) } } >Update Fare</Button>
+                    
                     <Button className='btn btn-danger' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(vhl.vehicle_id) } } >Remove</Button>
                     </td>
                     
@@ -269,48 +374,44 @@ const handleDelete = () => {
               </Table>
               <CardFooter className="py-4">
                 <nav aria-label="...">
-                  <Pagination
+                <Pagination
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
                     <PaginationItem className="disabled">
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(0);setEnd(10);}}
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem className="active">
+                    <PaginationItem className={`${(start===0 )&&(end===10)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                      onClick={(e) => {setStart(0);setEnd(10);}}
                       >
                         1
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===10 )&&(end===20)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(10);setEnd(20);}}
                       >
-                        2 <span className="sr-only">(current)</span>
+                        2 
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===20 )&&(end===30)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(20);setEnd(30);}}
                       >
                         3
                       </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+
+                        onClick={(e) => {setStart(start+10);setEnd(end+10);}}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>

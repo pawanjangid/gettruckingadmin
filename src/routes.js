@@ -3,7 +3,6 @@ import Profile from "views/examples/Profile.js";
 import Maps from "views/examples/Maps.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
-import Tables from "views/examples/Tables.js";
 import Riders from "views/examples/Riders";
 import Drivers from "views/examples/Drivers";
 import ManageDocuments from "views/examples/ManageDocuments";
@@ -18,8 +17,10 @@ import Trips from "views/examples/Trips";
 import Admins from "views/examples/Admins";
 import Payout from "views/examples/Payout";
 import Comming from "views/examples/Comming";
-
-
+import Settings from "views/examples/Settings";
+import Reasons from "views/examples/Reasons";
+import DriverRides from "views/examples/DriverRides"
+import ProfileUser from "views/examples/ProfileUser"
 var routes = [
   {
     path: "/index",
@@ -58,6 +59,22 @@ var routes = [
     name: "Profile",
     icon: "ni ni-bullet-list-67 text-red",
     component: Profile,
+    layout: "/admin",
+    visibility : false
+  },
+  {
+    path: "/ProfileUser/:user_id",
+    name: "Profile",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: ProfileUser,
+    layout: "/admin",
+    visibility : false
+  },
+  {
+    path: "/DriverRides/:user_id",
+    name: "Profile",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: DriverRides,
     layout: "/admin",
     visibility : false
   },
@@ -103,26 +120,10 @@ var routes = [
     visibility : true
   },
   {
-    path: "/additional",
-    name: "Aditional Reason",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Comming,
-    layout: "/admin",
-    visibility : true
-  },
-  {
     path: "/reasons",
     name: "Manage Cancel Reason",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Comming,
-    layout: "/admin",
-    visibility : true
-  },
-  {
-    path: "/Locations",
-    name: "Manage Location",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Comming,
+    component: Reasons,
     layout: "/admin",
     visibility : true
   },
@@ -182,14 +183,7 @@ var routes = [
     layout: "/admin",
     visibility : true
   },
-  {
-    path: "/currency",
-    name: "Manage Currency",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Comming,
-    layout: "/admin",
-    visibility : true
-  },
+  
   {
     path: "/Help",
     name: "Manage Help & Support",
@@ -199,10 +193,10 @@ var routes = [
     visibility : true
   },
   {
-    path: "/tables",
+    path: "/settings",
     name: "Settings",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
+    component: Settings,
     layout: "/admin",
     visibility : true
   },

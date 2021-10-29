@@ -18,8 +18,9 @@ import Header from "components/Headers/Header.js";
 
 const Country = (props) => {
 const [vehicle,setVehicle] = useState([]);
-
-
+const [start,setStart] = useState(0);
+const [end,setEnd] = useState(10);
+const [count,setCount] = useState(0)
   useEffect(() => {
     axios.get("https://gettruckingbackend.herokuapp.com/admin/country")
     .then((response)=>{
@@ -32,12 +33,38 @@ const [vehicle,setVehicle] = useState([]);
     .catch((error)=>{
       console.log(error);
     })
-  },[]);
+  },[count]);
 
 
 
-const handleDelete = () => {
-  console.log("Deleted");
+const handleStatusChange = (id,status) => {
+  let status1 = status;
+  if(status === 'active'){
+    status1 = 'inactive';
+  }else{
+    status1 = 'active';
+  }
+
+
+  const data = {
+    id:id,
+    status:status1,
+  }
+  console.log(data)
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/countryStatus",data)
+  .then((response)=>{
+    if(response.status===200){
+        console.log(response)
+      setCount(count+1);
+    }else{
+      console.log(response.data.message);
+    }
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+
+
 }
 
 
@@ -71,7 +98,7 @@ const handleDelete = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {vehicle.map((vhl)=>
+                  {vehicle.slice(start,end).map((vhl)=>
                     <tr>
                     
                     
@@ -85,7 +112,7 @@ const handleDelete = () => {
                     <td>{vhl.phonecode} </td>
                     <td>{vhl.iso3}</td>
                     <td>
-                    <Button className='btn btn-danger' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(vhl.vehicle_id) } } >Remove</Button>
+                    <Button className={vhl.status==='inactive' ? 'btn btn-danger' : 'btn btn-success'} onClick={() => { if (window.confirm('Are you sure you wish to change status of this country?')); handleStatusChange(vhl.id,vhl.status) } } >{vhl.status}</Button>
                     </td>
                     
                     
@@ -96,48 +123,44 @@ const handleDelete = () => {
               </Table>
               <CardFooter className="py-4">
                 <nav aria-label="...">
-                  <Pagination
+                <Pagination
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
                     <PaginationItem className="disabled">
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(0);setEnd(10);}}
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem className="active">
+                    <PaginationItem className={`${(start===0 )&&(end===10)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                      onClick={(e) => {setStart(0);setEnd(10);}}
                       >
                         1
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===10 )&&(end===20)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(10);setEnd(20);}}
                       >
-                        2 <span className="sr-only">(current)</span>
+                        2 
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem>
+                    <PaginationItem className={`${(start===20 )&&(end===30)? "active" : ""}`}>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => {setStart(20);setEnd(30);}}
                       >
                         3
                       </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+
+                        onClick={(e) => {setStart(start+10);setEnd(end+10);}}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>

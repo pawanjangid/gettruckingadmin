@@ -10,35 +10,30 @@ import {
   Table,
   Container,
   Row,
-  Col,
-  Button,
-  Modal, 
-  ModalHeader, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
+  Modal,
+  ModalHeader,
+  ModalBody,
   Form,
+  FormGroup,
   Input,
   InputGroup,
+  ModalFooter,
+  Col,
+  Button,
+
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 
-const DiscountAndCoupon = (props) => {
-const [coupons,setCoupons] = useState([]);
+const Riders = () => {
+const [reasons,setReasons] = useState([]);
 const [count,setCount] = useState(0);
-const [message,setMessage] = useState();
-const [coupon,setCoupon] = useState();
-const [bonus,setBonus] = useState();
-const [start,setStart] = useState(0);
-const [end,setEnd] = useState(10);
-
 
   useEffect(() => {
-    axios.get("https://gettruckingbackend.herokuapp.com/admin/coupon")
+    axios.get("https://gettruckingbackend.herokuapp.com/admin/reason")
     .then((response)=>{
       if(response.status===200){
-        setCoupons(response.data.data);
+        setReasons(response.data.data);
       }else{
         console.log(response.data.message);
       }
@@ -49,93 +44,153 @@ const [end,setEnd] = useState(10);
   },[count]);
 
 
+
+const [message,setMessage] = useState();
+const [start,setStart] = useState(0);
+const [end,setEnd] = useState(10);
+
+
+
 const submitHandler = () => {
-    const data = {
-      coupon:coupon,
-      bonus_amount:bonus
-    }
-    console.log(data)
-    axios.post("https://gettruckingbackend.herokuapp.com/admin/coupon",data)
-    .then((response)=>{
-      if(response.status===200){
-          console.log(response)
-        setCount(count+1);
-        setMessage('Coupon added successfully');
-      }else{
-        setMessage(response.data.message);
-      }
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
-}
-
-const handleDelete = (coupon_id) => {
-
   const data = {
-    coupon_id:coupon_id
+    reason:reason
   }
   console.log(data)
-  axios.post("https://gettruckingbackend.herokuapp.com/admin/deleteCoupon",data)
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/reason",data)
   .then((response)=>{
     if(response.status===200){
-      setMessage('Coupon Removed successfully');
         console.log(response)
       setCount(count+1);
+      setMessage('Reason Added successfully');
     }else{
-      console.log(response.data.message);
+      setMessage(response.data.message);
     }
   })
   .catch((error)=>{
     console.log(error);
   })
-
-
 }
 
-  const [modal, setModal] = useState(false);
 
-  const toggle = () => setModal(!modal);
+
+
+const handleDelete = (reason_id) => {
+  const data = {
+    reason_id: reason_id,
+  }
+
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/removeAdmin",data)
+  .then((response)=>{
+    if(response.status===200){
+        console.log(response)
+      setCount(count+1);
+      setMessage('Removed successfully');
+    }else{
+      setMessage(response.data.message);
+    }
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+}
+
+
+
+const [modal, setModal] = useState(false);
+const [editModal,setEditModal] = useState(false);
+const [reason,setReason]= useState();
+const [reasonId,setReasonId]= useState();
+
+function editData(item){
+  setReason(item.reason);
+  setReasonId(item.reason_id);
+  Edittoggle();
+}
+
+
+
+const submitEditHandler = () => {
+  const data = {
+    reason:reason,
+    reason_id:reasonId,
+  }
+  console.log(data)
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/editReason",data)
+  .then((response)=>{
+    if(response.status===200){
+      setCount(count+1);
+      setMessage('Reason updated successfully');
+    }else{
+      setMessage(response.data.message);
+    }
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+}
+
+const toggle = () => setModal(!modal);
+const Edittoggle = () => setEditModal(!editModal);
 
   return (
     <>
-
       <Header />
-      {/* Page content */}
-
-        <Modal isOpen={modal} toggle={toggle} className="">
-          <ModalHeader toggle={toggle}>Add New Coupon</ModalHeader>
+      <Modal isOpen={modal} toggle={toggle} className="">
+          <ModalHeader toggle={toggle}>Add New Reason</ModalHeader>
           <ModalBody>
             
           <Form role="form">
-              <FormGroup>
+              <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
+                  
                   <Input
-                    placeholder="Coupon"
+                    placeholder="Name"
                     type="text"
-                    value={coupon}
-                    onChange={(e)=>{setCoupon(e.target.value)}}
+                    value={reason}
+                    onChange={(e)=>{setReason(e.target.value)}}
                   />
                 </InputGroup>
               </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
-                  <Input
-                    placeholder="Bonus Amount"
-                    type="text"
-                    value={bonus}
-                    onChange={(e)=>{setBonus(e.target.value)}}
-                  />
-                </InputGroup>
-              </FormGroup>
+             
+              
             </Form>
+          
+          
+          
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={()=>{submitHandler();toggle()}}>Submit</Button>{' '}
             <Button color="secondary" onClick={toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
-      
+
+        <Modal isOpen={editModal} toggle={Edittoggle} className="">
+          <ModalHeader toggle={Edittoggle}>Edit Reason</ModalHeader>
+          <ModalBody>
+            
+          <Form role="form">
+              <FormGroup className="mb-3">
+                <InputGroup className="input-group-alternative">
+                  
+                  <Input
+                    placeholder="Name"
+                    type="text"
+                    value={reason}
+                    onChange={(e)=>{setReason(e.target.value)}}
+                  />
+                </InputGroup>
+              </FormGroup>
+             
+            </Form>
+          
+          
+          
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={()=>{submitEditHandler();Edittoggle()}}>Submit</Button>{' '}
+            <Button color="secondary" onClick={Edittoggle}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
 
 
       <Container className="mt--7" fluid>
@@ -143,31 +198,41 @@ const handleDelete = (coupon_id) => {
         <Row>
           <div className="col">
             <Card className="shadow">
-              <CardHeader className="border-0">
+            <CardHeader className="border-0">
                 <Row>
-                  <Col><h3>Coupon Manager</h3></Col>
-                  <Col><Button color="primary" onClick={toggle} >Add Coupon</Button></Col>
+                  <Col><h3>Reasons List</h3></Col>
+                  <Col><Button color="primary" onClick={toggle} >Add New Reason</Button></Col>
                 </Row>
                 {message}
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Coupon</th>
-                    <th scope="col">Bonus Amount</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Created At</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {coupons.slice(start,end).map((cpn)=>
-                    <tr>
-                    <th>
-                      {cpn.coupon}
+                  {reasons.slice(start, end).map((rsn)=>
+                  <tr>
+                    <th scope="row">
+                    
+                          <span className="mb-0 text-sm">
+                            {rsn.reason} 
+                          </span>
                     </th>
-                    <td>{cpn.bonus_amount}</td>
-                   
                     <td>
-                    <Button className='btn btn-danger' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(cpn.coupon_id) } } >Remove</Button>
+                      {(new Date(rsn.createAt * 1000)).toGMTString()}  
+                    </td>
+                    
+                    <td className="text-right">
+                      <a href="#!"  style={{padding:4}} onClick={()=>{editData(rsn)}}>
+                        <Button className="btn btn-warning">Edit</Button>
+                      </a>
+                      <a href="#!" style={{padding:4}}>
+                        <Button className="btn btn-danger" onClick={()=>handleDelete(rsn.reason_id)}>Remove</Button>
+                      </a>
                     </td>
                   </tr>
                     )}
@@ -230,4 +295,4 @@ const handleDelete = (coupon_id) => {
   );
 };
 
-export default DiscountAndCoupon;
+export default Riders;

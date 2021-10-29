@@ -4,7 +4,6 @@ import React,{useEffect,useState} from "react";
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   Container,
   Row,
@@ -17,19 +16,18 @@ import axios from "axios";
 
 const Profile = (props) => {
 
-  const [driver,setDriver] = useState();
-  const [count,setCount] = useState(0);
+  const [user,setUser] = useState();
 
   useEffect(() => {
     //console.log(props.match.params.user_id);
     var data = {
-      driver_id : props.match.params.user_id
+      user_id : props.match.params.user_id
     }
-    axios.post("https://gettruckingbackend.herokuapp.com/admin/driverById",data)
+    axios.post("https://gettruckingbackend.herokuapp.com/admin/userById",data)
     .then((response)=>{
       if(response.status===200){
         console.log(response)
-        setDriver(response.data.data);
+        setUser(response.data.data[0]);
       }else{
         console.log(response.data.message);
       }
@@ -37,27 +35,7 @@ const Profile = (props) => {
     .catch((error)=>{
       console.log(error);
     })
-  },[count,props.match.params.user_id])
-
-const handleStatusChange = () => {
-  //console.log(props.match.params.user_id);
-  var data = {
-    driver_id : props.match.params.user_id
-  }
-  axios.post("https://gettruckingbackend.herokuapp.com/admin/driverStatus",data)
-    .then((response)=>{
-      console.log(response);
-      if(response.status===200){
-        setCount(count+1);
-      }else{
-        console.log(response.data.message);
-      }
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
-}
-
+  },[props.match.params.user_id])
 
 
 
@@ -82,7 +60,7 @@ const handleStatusChange = () => {
           <Row>
             <Col lg="12" md="12">
               <h1 className="display-2 text-white">
-                {driver ? driver.fullName : "Unavailable"}
+                {user ? user.fullName : "Unavailable"}
               </h1>
               
             </Col>
@@ -102,7 +80,7 @@ const handleStatusChange = () => {
                       <img
                         alt="..."
                         className="rounded-circle"
-                        src={driver ? 'https://gettruckingbackend.herokuapp.com'+driver.photo : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
+                        src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
                       />
                     </a>
                   </div>
@@ -113,49 +91,43 @@ const handleStatusChange = () => {
                 
                 <div className="text-center">
                   <h3>
-                  {driver ? driver.fullName : "Unavailable"}
+                  {user ? user.firstName + ' ' + user.lastName : 'unavailbale'} 
                     <span className="font-weight-light"></span>
                   </h3>
-                  <div className="h5 font-weight-300">
-                    <i className="ni location_pin mr-2" />
-                    Identification : {driver ? driver.Identification : "Unavailable"}
-                  </div>
+                 
                   <div className="mt-2 mb-2">
-                    <a href={driver ? "tel:"+driver.phone : "9876543210"}>
+                    <a href={user ? "tel:"+user.phone : "9876543210"}>
                     <Button
                         color="success"
                       >
-                        Call Driver Now
+                        Call User Now
                       </Button>
                     </a>
                   </div>
                   <div>
-                    <a href={driver ? "mailto:"+driver.email : null}>
+                    <a href={user ? "mailto:"+user.email : null}>
                     <Button
                         color="default"
                       >
-                        Mail Driver Now
+                        Mail User Now
                       </Button>
                     </a>
                   </div>
 
-
-                  <div className="mt-6">
-                    <a href={driver ? "tel:"+driver.emergency_contact_number : null}>
-                    <Button
-                        color="danger"
-                      >
-                        Emergency : {driver ? driver.emergency_contact_person : "Unavailable"}
-                      </Button>
-                    </a>
-                    
+                  <div className="mt-4 mb-2">
+                    <h2>
+                    Wallet Balance : {user ? user.wallet_balance : null}
+                    </h2>
                     
                   </div>
+
+
+              
                 </div>
               </CardBody>
             </Card>
           </Col>
-          <Col className="order-xl-1" xl="8">
+          {/* <Col className="order-xl-1" xl="8">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
@@ -171,7 +143,7 @@ const handleStatusChange = () => {
                     Licence Expiry
                   </Col>
                   <Col xs="7">
-                    {driver ? driver.driving_license_expiry:null}
+                    {user ? user.driving_license_expiry:null}
                   </Col>
                 </Row>
                 <Row style={{padding:5}}>
@@ -179,7 +151,7 @@ const handleStatusChange = () => {
                    Vehicle Modal
                   </Col>
                   <Col xs="7">
-                    {driver ? driver.vehicle_modal:null}
+                    {user ? user.vehicle_modal:null}
                   </Col>
                 </Row>
                 <Row style={{padding:5}}>
@@ -187,7 +159,7 @@ const handleStatusChange = () => {
                   License Plate Number
                   </Col>
                   <Col xs="7">
-                    {driver ? driver.License_plate_number:null}
+                    {user ? user.License_plate_number:null}
                   </Col>
                 </Row>
 
@@ -197,7 +169,7 @@ const handleStatusChange = () => {
                   <img
                         alt="..."
                         className="rounded-circle"
-                        src={driver ? 'https://gettruckingbackend.herokuapp.com'+driver.Driving_license :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
+                        src={user ? 'https://gettruckingbackend.herokuapp.com'+user.Driving_license :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
                       />
                   </Card>
                 </Row>
@@ -208,7 +180,7 @@ const handleStatusChange = () => {
                   <img
                         alt="..."
                         className="rounded-circle"
-                        src={driver ? 'https://gettruckingbackend.herokuapp.com'+driver.Vehicle_License :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
+                        src={user ? 'https://gettruckingbackend.herokuapp.com'+user.Vehicle_License :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
                       />
                   </Card>
                 </Row>
@@ -219,7 +191,7 @@ const handleStatusChange = () => {
                   <img
                         alt="..."
                         className="rounded-circle"
-                        src={driver ? 'https://gettruckingbackend.herokuapp.com'+driver.vehicle_body :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
+                        src={user ? 'https://gettruckingbackend.herokuapp.com'+user.vehicle_body :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
                       />
                   </Card>
                 </Row>
@@ -243,7 +215,7 @@ const handleStatusChange = () => {
                   <img
                         alt="..."
                         className="rounded-circle"
-                        src={driver ? 'https://gettruckingbackend.herokuapp.com'+driver.ID_card_front :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
+                        src={user ? 'https://gettruckingbackend.herokuapp.com'+user.ID_card_front :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
                       />
                   </Card>
                 </Row>
@@ -254,7 +226,7 @@ const handleStatusChange = () => {
                   <img
                         alt="..."
                         className="rounded-circle"
-                        src={driver ? 'https://gettruckingbackend.herokuapp.com'+driver.ID_card_back :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
+                        src={user ? 'https://gettruckingbackend.herokuapp.com'+user.ID_card_back :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
                       />
                   </Card>
                 </Row>
@@ -265,7 +237,7 @@ const handleStatusChange = () => {
                   <img
                         alt="..."
                         className="rounded-circle"
-                        src={driver ? 'https://gettruckingbackend.herokuapp.com'+driver.insurance :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
+                        src={user ? 'https://gettruckingbackend.herokuapp.com'+user.insurance :'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIdOWn7eZASWXAYDIRpb9DnYkjzIQsdc02_KUi5zIzQ6AhoFNYj5iFnUuKbJ9BhJdWEuw&usqp=CAU'}
                       />
                   </Card>
                 </Row>
@@ -274,16 +246,16 @@ const handleStatusChange = () => {
                 <Row style={{padding:5}}>
                   
                   <Card xs="12" className="text-center"  style={{padding:10}}>
-                  {driver && <div >
-                    {driver.document_status==='0' &&
+                  {user && <div >
+                    {user.document_status==='0' &&
                     <Button
                       color="success"
-                      onClick={() => { if (window.confirm('Are you to verify these detail of driver')); handleStatusChange() } }
+                      onClick={() => { if (window.confirm('Are you to verify these detail of user')); handleStatusChange() } }
                     >
                       Verify Documents
                     </Button>}
                     <p style={{backgroundColor:"lightgreen",padding:10}}>
-                      {!(driver.document_status==='0') ? "This Profile is verified" : null}
+                      {!(user.document_status==='0') ? "This Profile is verified" : null}
                     </p>
                     
                     </div>}
@@ -292,7 +264,7 @@ const handleStatusChange = () => {
 
               </CardBody>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
       </Container>
     </>

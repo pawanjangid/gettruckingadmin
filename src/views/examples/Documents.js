@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React, {useEffect} from "react";
 
 // reactstrap components
 import {
@@ -13,27 +13,17 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import {
+  useParams
+} from "react-router-dom";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import axios from "axios"
+
 const Documents = () => {
-
-  const [users,setUsers] = useState([])
+const {driver_id} = useParams();
   useEffect(() => {
-    axios.get("https://gettruckingbackend.herokuapp.com/admin/admin")
-    .then((response)=>{
-      if(response.status===200){
-        setUsers(response.data.data);
-      }else{
-        console.log(response.data.message);
-      }
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
-  },[]);
-
-
+    console.log(driver_id);
+  })
   
   return (
     <>
@@ -61,6 +51,7 @@ const Documents = () => {
               </Row>
               <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                 <div className="d-flex justify-content-between">
+                  
                   <Button
                     className="mr-4"
                     color="info"
