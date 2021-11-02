@@ -94,19 +94,15 @@ const [end,setEnd] = useState(10);
                           <i className="fas fa-ellipsis-v" />
                         </DropdownToggle>
                         <DropdownMenu className="dropdown-menu-arrow" right>
-                          <DropdownItem
-                            href={"./Profile/"+user.user_id}
-                          >
+                          <DropdownItem onClick={(e) => e.preventDefault()}>
                             Approve
                           </DropdownItem>
                           <DropdownItem
-                            href="#pablo"
                             onClick={(e) => e.preventDefault()}
                           >
                             Decline
                           </DropdownItem>
                           <DropdownItem
-                            href="#pablo"
                             style={{backgroundColor:"#ffe8e0"}}
                             onClick={(e) => e.preventDefault()}
                           >

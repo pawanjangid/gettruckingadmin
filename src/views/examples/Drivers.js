@@ -866,7 +866,7 @@ const handleActiveStatusChange = (active,driver_id) => {
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={()=>{submitEditHandler();Edittoggle()}}>Submit</Button>{' '}
-            <Button color="secondary" onClick={toggle}>Cancel</Button>
+            <Button color="secondary" onClick={Edittoggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
 
@@ -880,7 +880,7 @@ const handleActiveStatusChange = (active,driver_id) => {
             <CardHeader className="border-0">
                 <Row>
                   <Col><h3>Drivers List</h3></Col>
-                  <Col><Button color="primary" onClick={toggle} >Add New Drvier</Button></Col>
+                  <Col><Button color="primary" onClick={toggle} >Add New Driver</Button></Col>
                 </Row>
                 {message}
               </CardHeader>

@@ -20,8 +20,7 @@ import {
   FormGroup,
   Form,
   Input,
-  InputGroupAddon,
-  InputGroupText,
+  Label,
   InputGroup,
 } from "reactstrap";
 // core components
@@ -29,16 +28,14 @@ import Header from "components/Headers/Header.js";
 
 const ManageFare = (props) => {
 const [vehicle,setVehicle] = useState([]);
-const [image,setImage] = useState();
-const [vehicle_name,setVehicleName] = useState();
-const [description,setDescription] = useState();
-const [dimension,setDimension] = useState();
 const [baseprice,setBaseprice] = useState();
 const [parKmcost,setParKmCost] = useState();
 const [count,setCount] = useState(0);
 const [message,setMessage] = useState();
 const [start,setStart] = useState(0);
 const [end,setEnd] = useState(10);
+const [vehicleId,setVehicleId] = useState();
+
 
   useEffect(() => {
     axios.get("https://gettruckingbackend.herokuapp.com/admin/vehicles")
@@ -56,48 +53,19 @@ const [end,setEnd] = useState(10);
 
 
 
-const handleFileChange = (e) => {
-
-    let files = e.target.files;
-    var allFiles = [];
-    for (var i = 0; i < files.length; i++) {
-
-      let file = files[i];
-      let reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        let fileInfo = {
-          name: file.name,
-          type: file.type,
-          size: Math.round(file.size / 1000) + ' kB',
-          base64: reader.result,
-          file: file,
-        };
-        allFiles.push(fileInfo);
-        if(allFiles.length === files.length){
-            console.log(allFiles)
-          setImage(allFiles[0].base64)
-        }
-      }
-    }
-  }
-
-const submitHandler = () => {
+  const submitEditHandler = () => {
     const data = {
-      vehicle_name:vehicle_name,
-      description:description,
-      dimension:dimension,
       baseprice:baseprice,
       parKmcost:parKmcost,
-      image:image
+      vehicle_id:vehicleId,
     }
     console.log(data)
-    axios.post("https://gettruckingbackend.herokuapp.com/admin/vehicles",data)
+    axios.post("https://gettruckingbackend.herokuapp.com/admin/editFare",data)
     .then((response)=>{
       if(response.status===200){
           console.log(response)
         setCount(count+1);
-        setMessage('Vehicle added successfully');
+        setMessage('Fare Updated updated successfully');
       }else{
         setMessage(response.data.message);
       }
@@ -105,11 +73,16 @@ const submitHandler = () => {
     .catch((error)=>{
       console.log(error);
     })
-}
+  }
 
-const handleDelete = () => {
-  console.log("Deleted");
-}
+  function editData(item){
+    console.log(item);
+    setBaseprice(item.baseprice);
+    setParKmCost(item.parKmcost);
+    setVehicleId(item.vehicle_id);
+    toggle();
+  }
+
 
   const [modal, setModal] = useState(false);
 
@@ -121,46 +94,21 @@ const handleDelete = () => {
       <Header />
       {/* Page content */}
 
-        <Modal isOpen={modal} toggle={toggle} className="">
-          <ModalHeader toggle={toggle}>Add New Vehicle Type</ModalHeader>
+      <Modal isOpen={modal} toggle={toggle} className="">
+          <ModalHeader toggle={toggle}>Edit Fare</ModalHeader>
           <ModalBody>
             
           <Form role="form">
-              <FormGroup className="mb-3">
-                <InputGroup className="input-group-alternative">
-                  
-                  <Input
-                    placeholder="Vehicle Name"
-                    type="text"
-                    value={vehicle_name}
-                    onChange={(e)=>{setVehicleName(e.target.value)}}
-                  />
-                </InputGroup>
-              </FormGroup>
+             
               <FormGroup>
+                  <Label for="basePrice">
+                    Base Price
+                  </Label>
                 <InputGroup className="input-group-alternative">
-                  <Input
-                    placeholder="Description"
-                    type="text"
-                    vehicle_name={description}
-                    onChange={(e)=>{setDescription(e.target.value)}}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
-                  <Input
-                    placeholder="Dimension"
-                    type="text"
-                    value={dimension}
-                    onChange={(e)=>{setDimension(e.target.value)}}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
+                
                   <Input
                     placeholder="Base Price"
+                    id="basePrice"
                     type="text"
                     value={baseprice}
                     onChange={(e)=>{setBaseprice(e.target.value)}}
@@ -168,26 +116,16 @@ const handleDelete = () => {
                 </InputGroup>
               </FormGroup>
               <FormGroup>
+                  <Label for="parKmcost">
+                    Par Km Cost
+                  </Label>
                 <InputGroup className="input-group-alternative">
                   <Input
                     placeholder="Par Km Cost"
+                    id="parKmcost"
                     type="text"
                     value={parKmcost}
                     onChange={(e)=>{setParKmCost(e.target.value)}}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      Image
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input
-                    placeholder="Dimension"
-                    type="file"
-                    onChange={(e)=>{handleFileChange(e)}}
                   />
                 </InputGroup>
               </FormGroup>
@@ -197,7 +135,7 @@ const handleDelete = () => {
           
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={()=>{submitHandler();toggle()}}>Submit</Button>{' '}
+            <Button color="primary" onClick={()=>{submitEditHandler();toggle()}}>Submit</Button>{' '}
             <Button color="secondary" onClick={toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
@@ -255,7 +193,7 @@ const handleDelete = () => {
                     <td>{vhl.baseprice} </td>
                     <td>{vhl.parKmcost}</td>
                     <td>
-                    <Button className='btn btn-danger' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(vhl.vehicle_id) } } >Remove</Button>
+                      <Button className='btn btn-danger' onClick={() => { editData(vhl) } } >Update Fare</Button>
                     </td>
                     
                     

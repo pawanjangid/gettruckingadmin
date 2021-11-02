@@ -133,8 +133,10 @@ const [vehicleId,setVehicleId] = useState();
 const [editModal,setEditModal] = useState(false);
 function editData(item){
   console.log(item);
-  setBaseprice(item.baseprice);
-  setParKmCost(item.parKmcost);
+  setVehicleName(item.vehicle_name);
+  setDescription(item.description);
+  setDimension(item.dimension);
+  setImage(item.image);
   setVehicleId(item.vehicle_id);
   Edittoggle();
 }
@@ -143,17 +145,19 @@ function editData(item){
 
 const submitEditHandler = () => {
   const data = {
-    baseprice:baseprice,
-    parKmcost:parKmcost,
+    vehicle_name: vehicle_name,
+    description: description,
+    dimension: dimension,
+    image: image,
     vehicle_id:vehicleId,
   }
   console.log(data)
-  axios.post("https://gettruckingbackend.herokuapp.com/admin/editFare",data)
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/updateVehicle",data)
   .then((response)=>{
     if(response.status===200){
         console.log(response)
       setCount(count+1);
-      setMessage('Fare Updated updated successfully');
+      setMessage('Vehicle Updated successfully');
     }else{
       setMessage(response.data.message);
     }
@@ -265,31 +269,59 @@ const Edittoggle = () => setEditModal(!editModal);
           <Form role="form">
              
               <FormGroup>
-                  <Label for="basePrice">
-                    Base Price
+                  <Label for="vehicle_name">
+                    Vehicle Name
                   </Label>
                 <InputGroup className="input-group-alternative">
                 
                   <Input
-                    placeholder="Base Price"
-                    id="basePrice"
+                    placeholder="Vehicle Name"
+                    id="vehicle_name"
                     type="text"
-                    value={baseprice}
-                    onChange={(e)=>{setBaseprice(e.target.value)}}
+                    value={vehicle_name}
+                    onChange={(e)=>{setVehicleName(e.target.value)}}
                   />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
-                  <Label for="parKmcost">
-                    Par Km Cost
+                  <Label for="description">
+                    Description
                   </Label>
                 <InputGroup className="input-group-alternative">
                   <Input
-                    placeholder="Par Km Cost"
-                    id="parKmcost"
+                    placeholder="Vehicle Description"
+                    id="description"
                     type="text"
-                    value={parKmcost}
-                    onChange={(e)=>{setParKmCost(e.target.value)}}
+                    value={description}
+                    onChange={(e)=>{setDescription(e.target.value)}}
+                  />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                  <Label for="description">
+                    Dimension
+                  </Label>
+                <InputGroup className="input-group-alternative">
+                  <Input
+                    placeholder="Vehicle Dimension"
+                    id="dimension"
+                    type="text"
+                    value={dimension}
+                    onChange={(e)=>{setDimension(e.target.value)}}
+                  />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                <InputGroup className="input-group-alternative">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      Image
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    placeholder="Dimension"
+                    type="file"
+                    onChange={(e)=>{handleFileChange(e)}}
                   />
                 </InputGroup>
               </FormGroup>
@@ -361,7 +393,7 @@ const Edittoggle = () => setEditModal(!editModal);
                     <td>{vhl.baseprice} </td>
                     <td>{vhl.parKmcost}</td>
                     <td>
-                    <Button className='btn btn-warning' onClick={() => { editData(vhl) } } >Update Fare</Button>
+                    <Button className='btn btn-warning' onClick={() => { editData(vhl) } } >Edit</Button>
                     
                     <Button className='btn btn-danger' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) handleDelete(vhl.vehicle_id) } } >Remove</Button>
                     </td>

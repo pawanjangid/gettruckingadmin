@@ -112,6 +112,10 @@ const [editPassword,setEditpassword] = useState();
 const [editPhone,setEditPhone] = useState();
 const [adminId,setAdminID] = useState();
 
+
+
+const [passwordModal,setPasswordModal] = useState(false);
+
 function editData(item){
   setEditName(item.name);
   setEditmail(item.email);
@@ -122,12 +126,12 @@ function editData(item){
 
 
 
+
 const submitEditHandler = () => {
   const data = {
     name:editname,
     email:editemail,
     phone:editPhone,
-    password:editPassword,
     admin_id:adminId,
   }
   console.log(data)
@@ -146,8 +150,42 @@ const submitEditHandler = () => {
   })
 }
 
+const [passwordMessage,setPasswordMessage] = useState();
+
+function changePassword(item){
+  setAdminID(item.admin_id);
+  Passwordtoggle()
+}
+
+const submitPasswordHandler = () => {
+  if(editPassword.length >= 6){
+    const data = {
+      password:editPassword,
+      admin_id:adminId,
+    }
+    console.log(data)
+    axios.post("https://gettruckingbackend.herokuapp.com/admin/changeAdminPassword",data)
+    .then((response)=>{
+      if(response.status===200){
+          Passwordtoggle();
+          setCount(count+1);
+          setMessage('Admin Password updated successfully');
+      }else{
+        setMessage(response.data.message);
+      }
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+
+  }else{
+    setPasswordMessage("Please enter password at least 6 digit")
+  }
+}
+
 const toggle = () => setModal(!modal);
 const Edittoggle = () => setEditModal(!editModal);
+const Passwordtoggle = () => setPasswordModal(!passwordModal);
 
   return (
     <>
@@ -171,24 +209,23 @@ const Edittoggle = () => setEditModal(!editModal);
               <FormGroup>
                 <InputGroup className="input-group-alternative">
                   <Input
+                    placeholder="Password"
+                    type="password"
+                    vehicle_name={password}
+                    onChange={(e)=>{setPassword(e.target.value)}}
+                  />
+                </InputGroup>
+              </FormGroup> 
+              <FormGroup>
+                <InputGroup className="input-group-alternative">
+                  <Input
                     placeholder="Email"
                     type="text"
                     vehicle_name={email}
                     onChange={(e)=>{setEmail(e.target.value)}}
                   />
                 </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
-                  <Input
-                    placeholder="Password"
-                    type="text"
-                    value={password}
-                    onChange={(e)=>{setPassword(e.target.value)}}
-                  />
-                </InputGroup>
-              </FormGroup>
-              
+              </FormGroup> 
               <FormGroup>
                 <InputGroup className="input-group-alternative">
                   <Input
@@ -237,16 +274,7 @@ const Edittoggle = () => setEditModal(!editModal);
                   />
                 </InputGroup>
               </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
-                  <Input
-                    placeholder="Password"
-                    type="text"
-                    value={editPassword}
-                    onChange={(e)=>{setEditpassword(e.target.value)}}
-                  />
-                </InputGroup>
-              </FormGroup>
+             
               
               <FormGroup>
                 <InputGroup className="input-group-alternative">
@@ -266,6 +294,36 @@ const Edittoggle = () => setEditModal(!editModal);
           <ModalFooter>
             <Button color="primary" onClick={()=>{submitEditHandler();Edittoggle()}}>Submit</Button>{' '}
             <Button color="secondary" onClick={Edittoggle}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+
+
+        <Modal isOpen={passwordModal} toggle={Passwordtoggle} className="">
+          <ModalHeader toggle={Passwordtoggle}>Change Admin Password</ModalHeader>
+          <ModalBody>
+            
+          <Form role="form">
+              
+              <FormGroup>
+                <InputGroup className="input-group-alternative">
+                  <Input
+                    placeholder="Password"
+                    type="text"
+                    value={editPassword}
+                    onChange={(e)=>{setEditpassword(e.target.value)}}
+                  />
+                </InputGroup>
+              </FormGroup>
+              
+             
+            </Form>
+          
+          {passwordMessage}
+          
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={()=>{submitPasswordHandler();}}>Submit</Button>{' '}
+            <Button color="secondary" onClick={Passwordtoggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
 
@@ -315,9 +373,12 @@ const Edittoggle = () => setEditModal(!editModal);
                       <a href="#!"  style={{padding:4}} onClick={()=>{editData(user)}}>
                         <Button className="btn btn-warning">Edit</Button>
                       </a>
-                      <a href="#!" style={{padding:4}}>
-                        <Button className="btn btn-danger" onClick={()=>handleDelete(user.admin_id)}>Remove</Button>
+                      <a href="#!"  style={{padding:4}} onClick={()=>{changePassword(user)}}>
+                        <Button className="btn btn-warning">Change Password</Button>
                       </a>
+                    <a href="#!" style={{padding:4}}>
+                      <Button className="btn btn-danger" onClick={()=>handleDelete(user.admin_id)}>Remove</Button>
+                    </a>
                     </td>
                   </tr>
                     )}

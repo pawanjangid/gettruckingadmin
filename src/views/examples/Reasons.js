@@ -79,7 +79,7 @@ const handleDelete = (reason_id) => {
     reason_id: reason_id,
   }
 
-  axios.post("https://gettruckingbackend.herokuapp.com/admin/removeAdmin",data)
+  axios.post("https://gettruckingbackend.herokuapp.com/admin/removeReason",data)
   .then((response)=>{
     if(response.status===200){
         console.log(response)
@@ -227,12 +227,12 @@ const Edittoggle = () => setEditModal(!editModal);
                     </td>
                     
                     <td className="text-right">
-                      <a href="#!"  style={{padding:4}} onClick={()=>{editData(rsn)}}>
-                        <Button className="btn btn-warning">Edit</Button>
-                      </a>
-                      <a href="#!" style={{padding:4}}>
+                      
+                        <Button className="btn btn-warning" onClick={()=>editData(rsn)}>Edit</Button>
+                      
+                      
                         <Button className="btn btn-danger" onClick={()=>handleDelete(rsn.reason_id)}>Remove</Button>
-                      </a>
+                      
                     </td>
                   </tr>
                     )}
